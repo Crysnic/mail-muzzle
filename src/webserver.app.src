@@ -1,0 +1,9 @@
+{application, webserver, [
+    {description, "Simple web server"},
+    {vsn, "0.0.1"},
+    {applications, [
+                  kernel,
+                   stdlib
+                   ]},
+ {mod, { webserver_app, []}}
+]}.

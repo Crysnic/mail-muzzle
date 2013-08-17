@@ -1,0 +1,14 @@
+body {
+    font-family: sans-serif;
+    margin-left: 29%;
+    margin-top: 15%;
+    background-image: url("../img/background06-2ec3.jpg");
+}
+
+#body {
+    background-color: #F5F5DC;
+    border: 1px solid none;
+    padding: 10px;
+    margin-right: 40%;
+}
+
