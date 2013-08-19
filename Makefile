@@ -1,15 +1,18 @@
 all: compile
 
 compile:
-	rebar compile
+	@rebar compile
 
 clean:
-	rebar clean
+	@rebar clean
 
 deps:
-	rebar get-deps
+	@rebar get-deps
+
+generate:
+	@rebar generate
 
 run:
-	erl -pa ebin deps/*/ebin -s webserver
+	@erl -pa apps/muz/ebin deps/*/ebin -s muz
 
-.PHONY: all compile deps run clean
+.PHONY: deps

@@ -1,9 +1,9 @@
-{application, webserver, [
+{application, muz, [
     {description, "Simple web server"},
     {vsn, "0.0.1"},
     {applications, [
                   kernel,
                    stdlib
                    ]},
- {mod, { webserver_app, []}}
+ {mod, { muz_app, []}}
 ]}.

@@ -1,4 +1,4 @@
--module(webserver_app).
+-module(muz_app).
 -behaviour(application).
 
 -export([start/2, stop/1]).
@@ -13,7 +13,7 @@ start(_Type, _Args) ->
         [{env, [{dispatch, Dispatch}]}]
     ),
     lager:log(info, self(), "Starting mail-muzzle HTTP web server", []),
-    webserver_sup:start_link().
+    muz_sup:start_link().
 
 stop(_State) ->
     ok.
@@ -23,7 +23,7 @@ stop(_State) ->
 dispatch_rules() ->
     Static = fun(Type) ->
         {lists:append(["/", Type, "/[...]"]), cowboy_static, [
-            {directory, {priv_dir, webserver, [list_to_binary(Type)]}},
+            {directory, {priv_dir, muz, [list_to_binary(Type)]}},
             {mimetypes, {fun mimetypes:path_to_mimes/2, default}}]    
         }
     end,
@@ -33,7 +33,7 @@ dispatch_rules() ->
             Static("img"),
             Static("js"),
             {"/", cowboy_static, [
-                {directory, {priv_dir, webserver, []}},
+                {directory, {priv_dir, muz, []}},
                 {file, "index.html"},
                 {mimetypes, {fun mimetypes:path_to_mimes/2, default}}
             ]}

@@ -1,4 +1,4 @@
--module(webserver_sup).
+-module(muz_sup).
 
 -behaviour(supervisor).
 
