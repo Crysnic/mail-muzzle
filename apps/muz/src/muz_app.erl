@@ -2,14 +2,14 @@
 -behaviour(application).
 
 -export([start/2, stop/1]).
--export([dispatch_rules/0]).
 
 %% Api
 
 start(_Type, _Args) ->
     Dispatch = dispatch_rules(),
-    {ok, _} = cowboy:start_http(http, 100, 
-        [{port, 9999}],
+    {ok, _} = cowboy:start_http(http, 100, [
+            {port, 9999}
+        ],
         [{env, [{dispatch, Dispatch}]}]
     ),
     lager:log(info, self(), "Starting mail-muzzle HTTP web server", []),
@@ -30,7 +30,6 @@ dispatch_rules() ->
     cowboy_router:compile([
         {'_',[
             Static("css"),
-            Static("img"),
             Static("js"),
             {"/", cowboy_static, [
                 {directory, {priv_dir, muz, []}},

@@ -1,6 +1,6 @@
 -module(muz).
 
--export([start/0, stop/0, update_routes/0]).
+-export([start/0, stop/0]).
 
 start() ->
     ok = application:start(lager),
@@ -9,10 +9,6 @@ start() ->
     ok = application:start(cowboy),
     ok = application:start(muz),
     ok = sync:go().
-
-update_routes() ->
-    Routes = muz_webserver_app:dispatch_rules(),
-    cowboy:set_env(http, dispatch, Routes).
 
 stop() ->
     sync:stop(),

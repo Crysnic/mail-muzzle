@@ -2,19 +2,26 @@
 <html>
     <head>
   	<meta charset="utf-8">
-        <title>Вход</title>
-        <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link href="css/signin.css" rel="stylesheet"> 
 	</head>
 
     <body>
-    <div id="body">
-    <h1>Welcome</h1>
-    <p>Please log on to continue</p>
-        <form>
-            <p> Login  <input type="text" id="login"></p>
-            <p> Password <input type="text" id="passwd"></p>
-            <p> <input type="button" id="submit" value="Login"></p>
+      <div class="container">
+        <form class="form-signin">
+          <h2 class="form-signin-heading">Please sign in</h2>
+          <input type="text" id="username" class="form-control" 
+            placeholder="Email adress" autofocus>
+          <input type="password" id="passwd" class="form-control"
+            placeholder="Password">
+          <label class="checkbox">
+            <input type="checkbox" name="remember" value="1"> Remember Me
+          </label>
+          <input type="button" id="submit" 
+            class="btn btn-success" value="Sign in">
         </form>
-    </div>
+      </div>
     </body>
 </html>

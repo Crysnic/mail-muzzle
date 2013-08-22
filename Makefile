@@ -9,7 +9,10 @@ clean:
 deps:
 	@rebar get-deps
 
-generate:
+test:
+	@rebar xref skip_deps=true
+
+release:
 	@rebar generate
 
 run:
