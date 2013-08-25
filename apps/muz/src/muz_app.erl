@@ -7,12 +7,14 @@
 
 start(_Type, _Args) ->
     Dispatch = dispatch_rules(),
-    {ok, _} = cowboy:start_http(http, 100, [
-            {port, 9999}
+    {ok, _} = cowboy:start_https(https, 100, [
+            {port, 9999},
+            {certfile, "apps/muz/priv/ssl/server.crt"},
+            {keyfile, "apps/muz/priv/ssl/server.key"}
         ],
         [{env, [{dispatch, Dispatch}]}]
     ),
-    lager:log(info, self(), "Starting mail-muzzle HTTP web server", []),
+    lager:log(info, self(), "Starting mail-muzzle HTTPS web server", []),
     muz_sup:start_link().
 
 stop(_State) ->
