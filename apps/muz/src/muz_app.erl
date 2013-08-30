@@ -7,10 +7,11 @@
 
 start(_Type, _Args) ->
     Dispatch = dispatch_rules(),
+    {ok, Port} = application:get_env(muz, port),
     {ok, _} = cowboy:start_https(https, 100, [
-            {port, 9999},
-            {certfile, "apps/muz/priv/ssl/server.crt"},
-            {keyfile, "apps/muz/priv/ssl/server.key"}
+            {port, Port},
+            {certfile, code:priv_dir("muz") ++ "/ssl/server.crt"},
+            {keyfile, code:priv_dir("muz") ++ "/ssl/server.key"}
         ],
         [{env, [{dispatch, Dispatch}]}]
     ),

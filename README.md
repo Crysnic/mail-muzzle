@@ -46,4 +46,18 @@ enter in the Common Name field **somecoolsite.dp.ua**.
 
  6. Generating a Self-Signed Certificate
 
-     `$ openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt`
+     `$ openssl x509 -req -days 3650 -in server.csr -signkey
+     server.key -out server.crt`
+
+##Setting
+
+1. Open muz.config
+2. Set the port:
+
+    ~~~
+    Example:
+    
+    {port, 9999} %% Change the default port 9999
+    
+    {port, 3468} %% on the 3468
+    ~~~

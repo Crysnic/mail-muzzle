@@ -16,6 +16,6 @@ release:
 	@rebar generate
 
 run:
-	@erl -pa apps/muz/ebin deps/*/ebin -s muz
+	@erl -pa apps/muz/ebin deps/*/ebin -config muz -s muz
 
 .PHONY: deps
