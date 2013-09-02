@@ -51,7 +51,7 @@ enter in the Common Name field **somecoolsite.dp.ua**.
 
 ##Setting
 
-1. Open muz.config
+1. Open rel/files/sys.config
 2. Set the port:
 
     ~~~

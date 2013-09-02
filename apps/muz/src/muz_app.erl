@@ -10,8 +10,8 @@ start(_Type, _Args) ->
     {ok, Port} = application:get_env(muz, port),
     {ok, _} = cowboy:start_https(https, 100, [
             {port, Port},
-            {certfile, code:priv_dir("muz") ++ "/ssl/server.crt"},
-            {keyfile, code:priv_dir("muz") ++ "/ssl/server.key"}
+            {certfile, code:priv_dir(muz) ++ "/ssl/server.crt"},
+            {keyfile, code:priv_dir(muz) ++ "/ssl/server.key"}
         ],
         [{env, [{dispatch, Dispatch}]}]
     ),
