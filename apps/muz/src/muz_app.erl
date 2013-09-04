@@ -15,7 +15,8 @@ start(_Type, _Args) ->
         ],
         [{env, [{dispatch, Dispatch}]}]
     ),
-    lager:log(info, self(), "Starting mail-muzzle HTTPS web server", []),
+    lager:log(info, self(), 
+    "Starting mail-muzzle HTTPS web server on https://localhost:9999", []),
     muz_sup:start_link().
 
 stop(_State) ->
@@ -34,6 +35,7 @@ dispatch_rules() ->
         {'_',[
             Static("css"),
             Static("js"),
+            Static("img"),
             {"/", cowboy_static, [
                 {directory, {priv_dir, muz, []}},
                 {file, "index.html"},

@@ -1,40 +1,54 @@
 body {
-      padding-top: 40px;
-        padding-bottom: 40px;
-          background-color: #eee;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-image: url(../img/back-3.jpg);
 }
 
 .form-signin {
-      max-width: 330px;
-        padding: 15px;
-          margin: 0 auto;
+  max-width: 400px;
+  padding: 15px 30px;
+  margin: 0 auto;
+  margin-top: 17%;
+  opacity: 0.91;
+  background-color: white;
+  -webkit-border-radius: 8px;       
+  border-radius: 8px;
+  box-shadow: 0 0 10px #E0FFFF; 
 }
 .form-signin .form-signin-heading,
 .form-signin .checkbox {
-      margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 .form-signin .checkbox {
-      font-weight: normal;
+  font-weight: normal;
 }
 .form-signin .form-control {
-      position: relative;
-        font-size: 16px;
-          height: auto;
-            padding: 10px;
-              -webkit-box-sizing: border-box;
-                   -moz-box-sizing: border-box;
-                             box-sizing: border-box;
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 .form-signin .form-control:focus {
-      z-index: 2;
+  z-index: 2;
 }
 .form-signin input[type="text"] {
-      margin-bottom: -1px;
-        border-bottom-left-radius: 0;
-          border-bottom-right-radius: 0;
+  margin-bottom: -1px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 .form-signin input[type="password"] {
-      margin-bottom: 10px;
-        border-top-left-radius: 0;
-          border-top-right-radius: 0;
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+h2 {
+  font-family: serif;
+  font-style: italic;
+  text-align: center;
+  color: #800080;
+  text-transform: capitalize;
 }
