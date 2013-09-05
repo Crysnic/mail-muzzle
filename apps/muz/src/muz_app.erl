@@ -16,7 +16,7 @@ start(_Type, _Args) ->
         [{env, [{dispatch, Dispatch}]}]
     ),
     lager:log(info, self(), 
-    "Starting mail-muzzle HTTPS web server on https://localhost:9999", []),
+    "Starting web server on https://localhost:9999", []),
     muz_sup:start_link().
 
 stop(_State) ->
@@ -40,7 +40,8 @@ dispatch_rules() ->
                 {directory, {priv_dir, muz, []}},
                 {file, "index.html"},
                 {mimetypes, {fun mimetypes:path_to_mimes/2, default}}
-            ]}
+            ]},
+            {"/auth", auth_handler, []}
         ]}
     ]).
 
