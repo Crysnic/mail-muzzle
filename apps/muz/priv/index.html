@@ -1,26 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html ng-app>
     <head>
   	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign in</title>
     <link rel="stylesheet" href="css/bootstrap.css">
-    <link href="css/signin.css" rel="stylesheet"> 
+    <link href="css/signin.css" rel="stylesheet">
+    <script src="js/angular.min.js"></script>
+    <script src="js/index.js"></script>
 	</head>
 
     <body>
       <div class="container">
-        <form class="form-signin">
+        <form class="form-signin" ng-controller="LogCtrl" id="inf">
           <h2 class="form-signin-heading">Please sign in</h2>
-          <input type="text" id="username" class="form-control" 
+          <input type="text" class="form-control" name="email" 
             placeholder="Email adress" autofocus>
-          <input type="password" id="passwd" class="form-control"
+          <input type="password" name="passwd" class="form-control"
             placeholder="Password">
           <label class="checkbox">
             <input type="checkbox" name="remember" value="1"> Remember Me
           </label>
-          <input type="button" id="submit" 
+          <input type="submit" name="submit" ng-click="send()" 
             class="btn btn-success" value="Sign in">
+          <div id="answ"></div>
         </form>
       </div>
     </body>
