@@ -1,5 +1,5 @@
 ## Name of the node
--name muz@127.0.0.1
+-sname muz
 
 ## Cookie for distributed erlang
 -setcookie muz
@@ -9,11 +9,16 @@
 ##-heart
 
 ## Enable kernel poll and a few async threads
-##+K true
-##+A 5
++K true
++A 5
+
+## Increase the maximum number of the allowed processes
++P 131072
 
 ## Increase number of concurrent ports/sockets
-##-env ERL_MAX_PORTS 4096
+-env ERL_MAX_PORTS 32768
+
+-env ERL_CRASH_DUMP log/erl_crash.dump
 
 ## Tweak GC to run more often
 ##-env ERL_FULLSWEEP_AFTER 10
