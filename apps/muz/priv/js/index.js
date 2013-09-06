@@ -12,12 +12,12 @@ function LogCtrl($scope, $http) {
             url: url,
             data: FormData,
             headers: {'Content-Type': 'application/json'}
-        }).success(function(response) {
+        }).success(function(data, status, headers, config) {
             document.getElementById("answ").innerHTML = 
-                "INFO: " + response.data;
-        }).error(function(response) {
+                "INFO: " + data.email;
+        }).error(function(data, status, headers, config) {
             document.getElementById("answ").innerHTML = 
-                "Error: " + response.data;    
+                "Error: " + data.error;    
         });
     }
 }
