@@ -13,13 +13,15 @@ allowed_methods(Req, State) ->
 
 content_types_accepted(Req, State) ->
     {[
-        {{<<"application">>, <<"json">>, []},
-        handle_to_all}
+        {{<<"application">>, <<"json">>, []}, handle_to_all}
     ], Req, State}.
 
 handle_to_all(Req, State) ->
     {ok, Body, Req1} = cowboy_req:body(Req),
     {struct, _Object} = mochijson2:decode(Body),
-    Json_answ = <<"{\"404\": \"invalid login/password\"}">>,
-    Req3 = cowboy_req:set_resp_body(Json_answ, Req1),
-    {true, Req3, State}.
+    Json_answ = <<"{\"error\": \"invalid login/password\"}">>,
+    Req2 = cowboy_req:set_resp_body(Json_answ, Req1),
+    Req3 = cowboy_req:set_resp_header(
+        <<"content-type">>, <<"application/json">>, Req2),
+    Reply = cowboy_req:reply(404, Req3),
+    {halt, Reply, State}.
