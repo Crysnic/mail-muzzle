@@ -44,4 +44,3 @@ dispatch_rules() ->
             {"/auth", auth_handler, []}
         ]}
     ]).
-
