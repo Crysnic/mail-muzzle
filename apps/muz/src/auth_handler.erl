@@ -18,7 +18,7 @@ content_types_accepted(Req, State) ->
 
 handle_to_all(Req, State) ->
     {ok, Body, Req1} = cowboy_req:body(Req),
-    {struct, _Object} = mochijson2:decode(Body),
+    _Object = jsx:decode(Body),
     Answ = <<"{\"error\": \"invalid login/password\"}">>,
     Req2 = cowboy_req:set_resp_body(Answ, Req1),
     Req3 = cowboy_req:set_resp_header(

@@ -3,21 +3,26 @@
 
 -export([start/2, stop/1]).
 
+-include("muz.hrl").
 %% Api
 
 start(_Type, _Args) ->
     Dispatch = dispatch_rules(),
-    {ok, Port} = application:get_env(muz, port),
+    Port = muz_lib:get_option(port),
+    IP = muz_lib:get_option(ip),
     {ok, _} = cowboy:start_https(https, 100, [
             {port, Port},
-            {certfile, code:priv_dir(muz) ++ "/ssl/server.crt"},
-            {keyfile, code:priv_dir(muz) ++ "/ssl/server.key"},
-            {ciphers, ciphers()} %% FIXME
+            {ip, IP},
+            {certfile, filename:join(
+                code:priv_dir(muz), muz_lib:get_option(certfile))},
+            {keyfile, filename:join(
+                code:priv_dir(muz), muz_lib:get_option(keyfile))},
+            {ciphers, ciphers()} 
         ],
         [{env, [{dispatch, Dispatch}]}]
     ),
-    lager:log(info, self(), 
-    "Starting web server on https://localhost:9999", []),
+    ?INFO("Starting web server on https://~s:~p", 
+        [inet_parse:ntoa(IP), Port]),
     muz_sup:start_link().
 
 stop(_State) ->
@@ -46,7 +51,6 @@ dispatch_rules() ->
         ]}
     ]).
 
-%% FIXME
 ciphers() ->
     [
         {dhe_rsa,aes_256_cbc,sha256},
