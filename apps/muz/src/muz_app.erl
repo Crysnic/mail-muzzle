@@ -11,7 +11,8 @@ start(_Type, _Args) ->
     {ok, _} = cowboy:start_https(https, 100, [
             {port, Port},
             {certfile, code:priv_dir(muz) ++ "/ssl/server.crt"},
-            {keyfile, code:priv_dir(muz) ++ "/ssl/server.key"}
+            {keyfile, code:priv_dir(muz) ++ "/ssl/server.key"},
+            {ciphers, ciphers()} %% FIXME
         ],
         [{env, [{dispatch, Dispatch}]}]
     ),
@@ -44,3 +45,27 @@ dispatch_rules() ->
             {"/auth", auth_handler, []}
         ]}
     ]).
+
+%% FIXME
+ciphers() ->
+    [
+        {dhe_rsa,aes_256_cbc,sha256},
+        {dhe_dss,aes_256_cbc,sha256},
+        {rsa,aes_256_cbc,sha256},
+        {dhe_rsa,aes_128_cbc,sha256},
+        {dhe_dss,aes_128_cbc,sha256},
+        {rsa,aes_128_cbc,sha256},
+        {dhe_rsa,aes_256_cbc,sha},
+        {dhe_dss,aes_256_cbc,sha},
+        {rsa,aes_256_cbc,sha},
+        {dhe_rsa,'3des_ede_cbc',sha},
+        {dhe_dss,'3des_ede_cbc',sha},
+        {rsa,'3des_ede_cbc',sha},
+        {dhe_rsa,aes_128_cbc,sha},
+        {dhe_dss,aes_128_cbc,sha},
+        {rsa,aes_128_cbc,sha},
+        {rsa,rc4_128,sha},
+        {rsa,rc4_128,md5},
+        {dhe_rsa,des_cbc,sha},
+        {rsa,des_cbc,sha}
+    ].
