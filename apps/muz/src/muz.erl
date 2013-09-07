@@ -8,5 +8,4 @@ start() ->
     ok = application:start(crypto),
     ok = application:start(ranch),
     ok = application:start(cowboy),
-    ok = application:start(muz),
-    ok = sync:go().
+    ok = application:start(muz).
