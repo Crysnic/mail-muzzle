@@ -1,6 +1,6 @@
 function LogCtrl($scope, $http) {
     var method = 'POST';
-    var url = 'https://localhost:9999/auth';
+    var url = 'https://127.0.0.1:9999/auth';
     $scope.send = function() {
         var FormData = {
           "email" : document.getElementById('inf').email.value,
