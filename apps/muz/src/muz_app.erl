@@ -1,15 +1,19 @@
 -module(muz_app).
+
 -behaviour(application).
 
+%% application callbacks
 -export([start/2, stop/1]).
 
 -include("muz.hrl").
-%% Api
+
+-define(DEFAULT_IP, {0, 0, 0, 0}).
+-define(DEFAULT_PORT, 9999).
 
 start(_Type, _Args) ->
     Dispatch = dispatch_rules(),
-    Port = muz_lib:get_option(port),
-    IP = muz_lib:get_option(ip),
+    Port = muz_lib:get_option(port, ?DEFAULT_IP),
+    IP = muz_lib:get_option(ip, ?DEFAULT_PORT),
     {ok, _} = cowboy:start_https(https, 100, [
             {port, Port},
             {ip, IP},
