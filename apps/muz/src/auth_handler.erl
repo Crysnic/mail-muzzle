@@ -18,7 +18,8 @@ content_types_accepted(Req, State) ->
 
 handle_to_all(Req, State) ->
     {ok, Body, Req1} = cowboy_req:body(Req),
-    _Object = jsx:decode(Body),
+    Object = jsx:decode(Body),
+    io:format("~p~n", [Object]),
     Answ = <<"{\"error\": \"invalid login/password\"}">>,
     Req2 = cowboy_req:set_resp_body(Answ, Req1),
     Req3 = cowboy_req:set_resp_header(

@@ -12,8 +12,8 @@
 
 start(_Type, _Args) ->
     Dispatch = dispatch_rules(),
-    Port = muz_lib:get_option(port, ?DEFAULT_IP),
-    IP = muz_lib:get_option(ip, ?DEFAULT_PORT),
+    Port = muz_lib:get_option(port, ?DEFAULT_PORT),
+    IP = muz_lib:get_option(ip, ?DEFAULT_IP),
     {ok, _} = cowboy:start_https(https, 100, [
             {port, Port},
             {ip, IP},
