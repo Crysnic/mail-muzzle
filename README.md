@@ -61,3 +61,16 @@ enter in the Common Name field **somecoolsite.dp.ua**.
     
     {port, 3468} %% on the 3468
     ~~~
+
+3. IP is specified as follows 
+
+    ~~~
+    {ip, {127, 0, 0, 1}} %% IP  127.0.0.1
+    ~~~
+
+4. Path to certification files specified in the following lines
+
+    ~~~
+    {certfile, "ssl/server.crt"} %% path to certification file 
+    {keyfile, "ssl/server.key"} %% path to server key
+    ~~~
