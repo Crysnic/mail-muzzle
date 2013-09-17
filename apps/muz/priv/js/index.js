@@ -1,4 +1,5 @@
-angular.module('Mail-muzzle', ['ngResource']);
+angular.module('Mail-muzzle', ['ngResource']).
+    run(function($rootScope, $location) {$rootScope.location = $location;});
 
 function LogCtrl($scope, $resource, $http) {
     $http.defaults.headers.post['Content-Type'] = 'application/json';
@@ -17,7 +18,7 @@ function LogCtrl($scope, $resource, $http) {
         var user = User.post({met: 'auth'},
             {email: usEmail, passwd: usPasswd},
             function(answer) {
-                result.innerHTML = 'INFO: ' + answer.data;
+                result.innerHTML = 'INFO: ' + answer.ok;
             },
             function(answer){
                 result.innerHTML = 'Error: ' + answer.data.error;    

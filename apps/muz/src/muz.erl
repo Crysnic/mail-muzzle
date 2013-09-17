@@ -5,6 +5,7 @@
 
 start() ->
     ok = application:start(lager),
+    ok = application:start(iconv),
     ok = application:start(crypto),
     ok = application:start(ranch),
     ok = application:start(cowboy),
@@ -15,4 +16,5 @@ stop() ->
     ok = application:stop(cowboy),
     ok = application:stop(ranch),
     ok = application:stop(crypto),
+    ok = application:stop(iconv),
     ok = application:stop(lager).
