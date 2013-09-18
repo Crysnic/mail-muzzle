@@ -1,0 +1,13 @@
+<form class="form-signin" ng-controller="LogCtrl" id="inf">
+  <h2 class="form-signin-heading">Please sign in</h2>
+  <input type="text" class="form-control" name="email" 
+        placeholder="Email adress" autofocus>
+  <input type="password" name="passwd" class="form-control"
+        placeholder="Password">
+  <label class="checkbox">
+    <input type="checkbox" name="remember" value="1"> Remember Me
+  </label>
+  <input type="submit" name="submit" ng-click="send()" 
+         class="btn btn-success" value="Sign in">
+  <div id="answ"></div>
+  </form>

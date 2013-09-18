@@ -41,7 +41,7 @@ login([H|[T]]) ->
         {ok, List} = mail_client:imap_list_mailbox(Pid),
         case get_mailbox_state(List) of
             {"UNSEEN", Val} ->
-                Answ = "{\"ok\": \"Inbox(" ++ Val ++ ")\"}",
+                Answ = "{\"ok\": \"" ++ Val ++ "\"}",
                 {binary:list_to_bin(Answ), 200};
             {error, Reason} ->
                 Error = "{\"error\": \"" ++ Reason ++ "\"}",
@@ -58,7 +58,8 @@ get_mailbox_state([]) ->
 get_mailbox_state([H|T]) ->
     case H of
         {"INBOX", _, List} ->
-            {State, Val} = lists:keyfind("UNSEEN", 1, List);
+            {State, Val} = lists:keyfind("UNSEEN", 1, List),
+            {State, Val};
         _ ->
             get_mailbox_state(T)
     end.

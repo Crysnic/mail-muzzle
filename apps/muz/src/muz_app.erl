@@ -46,12 +46,18 @@ dispatch_rules() ->
             Static("css"),
             Static("js"),
             Static("img"),
+            Static("www"),
             {"/", cowboy_static, [
                 {directory, {priv_dir, muz, []}},
                 {file, "index.html"},
                 {mimetypes, {fun mimetypes:path_to_mimes/2, default}}
             ]},
-            {"/auth", auth_handler, []}
+            {"/auth", auth_handler, []},
+            {"/mail", cowboy_static, [
+                {directory, {priv_dir, muz, []}},
+                {file, "js/mail.html"},
+                {mimetypes, {fun mimetypes:path_to_mimes/2, default}}
+            ]}
         ]}
     ]).
 
