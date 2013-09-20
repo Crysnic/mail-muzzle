@@ -53,11 +53,7 @@ dispatch_rules() ->
                 {mimetypes, {fun mimetypes:path_to_mimes/2, default}}
             ]},
             {"/auth", auth_handler, []},
-            {"/mail", cowboy_static, [
-                {directory, {priv_dir, muz, []}},
-                {file, "js/mail.html"},
-                {mimetypes, {fun mimetypes:path_to_mimes/2, default}}
-            ]}
+            {"/websocket", ws_handler, []}
         ]}
     ]).
 
