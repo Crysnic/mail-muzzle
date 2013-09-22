@@ -12,19 +12,37 @@ init({ssl, http}, Req, Opts) ->
     {upgrade, protocol, cowboy_websocket, Req, Opts}.
 
 websocket_init(_TransportName, Req, _Opts) ->
-    ?INFO("Websocket init: ~p", [Req]),
+    ?INFO("Websocket init"),
     {ok, Req, undefined_state, hibernate}.
 
 websocket_handle({text, Msg}, Req, State) ->
-    ?INFO("Handle text"),
-    {reply, {text, <<"That's what she said! ", Msg/binary>>}, Req, State};
-websocket_handle(_Data, Req, State) ->
-    ?INFO("Handle: ~p", [Req]),
+    case jsx:decode(Msg) of
+        [{_, <<"start">>}] ->
+            Email = muz_lib:get_option(email),
+            Passwd = muz_lib:get_option(password),
+            if
+                Email == undefined ->
+                    Answer = "[\"error\",\"undefined email/passwd\"]";
+                true ->
+                    {ok, Pid} = mail_client:open_retrieve_session(
+                        "ipv6.dp.ua", 993, Email, Passwd, [ssl, imap]),
+                    {MailBox, MbState, Value} = 
+                        muz_mail_handler:mailbox_list(Pid),
+                    Answer = "[\"" ++ MailBox ++"\",[\"" ++ MbState ++ 
+                        "\",\"" ++ Value ++"\"]]"
+            end
+    end, 
+    {reply, {text, binary:list_to_bin(Answer)}, Req, State, hibernate};
+websocket_handle(Data, Req, State) ->
+    ?INFO("Handle: ~p", [Data]),
     {ok, Req, State}.
 
+websocket_info({timeout, _Ref, Msg}, Req, State) ->
+    ?INFO("Websocket timeout"),
+    {reply, {text, Msg}, Req, State};
 websocket_info(_Info, Req, State) ->
     ?INFO("Websocket info"),
-    {ok, Req, State}.
+    {ok, Req, State, hibernate}.
 
 websocket_terminate(_Reason, _Req, _State) ->
     ok.

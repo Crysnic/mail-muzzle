@@ -2,15 +2,13 @@ var MailServices = angular.module('Mail-muzzle', ['ngResource']).
     run(function($rootScope, $location) {$rootScope.location = $location;});
 
 function emailRouteConfig($routeProvider) {
-    var State = {email: '', passwd: '', data: ''};
-
     $routeProvider.
     when('/', {
       controller: LogCtrl,
       templateUrl: 'www/login.html'
     }).
     when('/mail', {
-        controller: MailCtrl,
+        controller: MailCtrl, // in the file mail.js
         templateUrl: 'www/mail.html'
     }).
     otherwise({
@@ -20,12 +18,6 @@ function emailRouteConfig($routeProvider) {
 
 // Main controller
 MailServices.config(emailRouteConfig);
-
-// Mail controller
-function MailCtrl($scope, $resource) {
-    $scope.message = {email: State.email,
-                      data: State.data};
-}
 
 // Login controller
 function LogCtrl($scope, $resource, $http, $location) {
@@ -39,20 +31,14 @@ function LogCtrl($scope, $resource, $http, $location) {
     );
 
     $scope.send = function() {
-        var usEmail = document.getElementById('inf').email.value;
-        var usPasswd = document.getElementById('inf').passwd.value;
-        var result = document.getElementById('answ');
         var user = User.post({met: 'auth'},
-            {email: usEmail, passwd: usPasswd},
+            {email: $scope.email, passwd: $scope.passwd},
             function(answer) {
-                State = {email: usEmail, passwd: usPasswd,
-                         data: answer.ok};
-                result.innerHTML = 'INFO: ' + answer.ok;
+                $scope.answ = 'INFO: ' + answer.ok;
                 $location.path('/mail');
             },
             function(answer){
-		State = {email: '', passwd: '', data: ''};
-                result.innerHTML = 'Error: ' + answer.data.error;    
+                $scope.answ = 'Error: ' + answer.data.error;    
             });
     }
 }
