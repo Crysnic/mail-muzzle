@@ -28,11 +28,15 @@ websocket_handle({text, Msg}, Req, State) ->
                         "ipv6.dp.ua", 993, Email, Passwd, [ssl, imap]),
                     {MailBox, MbState, Value} = 
                         muz_mail_handler:mailbox_list(Pid),
-                    Answer = "[\"" ++ MailBox ++"\",[\"" ++ MbState ++ 
-                        "\",\"" ++ Value ++"\"]]"
+                    %%Answer = "[\"" ++ MailBox ++"\",[\"" ++ MbState ++ 
+                    %%    "\",\"" ++ Value ++"\"]]"
+                    Answer = jsx:encode([binary:list_to_bin(Email), 
+                                        binary:list_to_bin(MailBox),
+                                        [binary:list_to_bin(MbState),
+                                        binary:list_to_bin(Value)]])
             end
     end, 
-    {reply, {text, binary:list_to_bin(Answer)}, Req, State, hibernate};
+    {reply, {text, Answer}, Req, State, hibernate};
 websocket_handle(Data, Req, State) ->
     ?INFO("Handle: ~p", [Data]),
     {ok, Req, State}.

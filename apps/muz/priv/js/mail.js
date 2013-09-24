@@ -1,4 +1,4 @@
-function MailCtrl($scope) {
+function MailCtrl($scope, $rootScope) {
     var ws = new WebSocket("wss://127.0.0.1:9999/websocket");     
 
     ws.onopen = function() {
@@ -12,9 +12,8 @@ function MailCtrl($scope) {
 
     ws.onmessage = function(evt) {
         var retArray = JSON.parse(evt.data);
-        if(retArray[0] == "INBOX") {
-            alert("Inbox " + retArray[1][1]);
-            message.inbox = retArray[1][1];
-        };
+        $scope.message = {inbox: retArray[2][1],
+                          email: retArray[0]};
+        $scope.$digest();
     };
 }

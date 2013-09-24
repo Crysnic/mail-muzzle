@@ -13,14 +13,14 @@ function emailRouteConfig($routeProvider) {
     }).
     otherwise({
         redirectTo: '/'    
-    }); 
+    });
 }
 
 // Main controller
 MailServices.config(emailRouteConfig);
 
 // Login controller
-function LogCtrl($scope, $resource, $http, $location) {
+function LogCtrl($scope, $rootScope, $resource, $http, $location) {
     $http.defaults.headers.post['Content-Type'] = 'application/json';
     var User = $resource('/:met',
         {met:'@method'}, 
