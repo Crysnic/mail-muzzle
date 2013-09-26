@@ -5,6 +5,8 @@
          handle_to_all/2,
          allowed_methods/2]).
 
+-include("muz.hrl").
+
 init(_Transport, _Req, []) ->
     {upgrade, protocol, cowboy_rest}.
 
@@ -37,7 +39,7 @@ login([H|[T]]) ->
     Email = binary:bin_to_list(Em),
     Psw = binary:bin_to_list(Pass),
     try
-        mail_client:open_retrieve_session("ipv6.dp.ua", 993,
+        {ok, _Pid} = mail_client:open_retrieve_session("ipv6.dp.ua", 993,
                     Email, Psw, [ssl, imap]),
         {<<"{\"ok\": \"Successful login\"}">>, 200, Email, Psw}
     catch

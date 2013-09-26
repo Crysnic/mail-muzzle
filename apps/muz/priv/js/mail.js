@@ -11,9 +11,21 @@ function MailCtrl($scope, $rootScope) {
     };
 
     ws.onmessage = function(evt) {
-        var retArray = JSON.parse(evt.data);
-        $scope.message = {inbox: retArray[2][1],
-                          email: retArray[0]};
+        var mailBoxes = JSON.parse(evt.data);
+        $scope.message = {inbox: mailBoxRetStr(mailBoxes.INBOX[1]),
+                          email: mailBoxes.email,
+                          sent: mailBoxRetStr(mailBoxes.Sent[1]),
+                          drafts: mailBoxRetStr(mailBoxes.Drafts[1]),
+                          spam: mailBoxRetStr(mailBoxes.SPAM[1]),
+                          trash: mailBoxRetStr(mailBoxes.Trash[1])};
         $scope.$digest();
     };
+}
+
+function mailBoxRetStr(string) {
+    if(parseInt(string) == 0) {
+        return '';    
+    } else {
+        return "(" + string + ")";    
+    }
 }

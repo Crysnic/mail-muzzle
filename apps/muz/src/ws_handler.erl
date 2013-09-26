@@ -20,21 +20,11 @@ websocket_handle({text, Msg}, Req, State) ->
         [{_, <<"start">>}] ->
             Email = muz_lib:get_option(email),
             Passwd = muz_lib:get_option(password),
-            if
-                Email == undefined ->
-                    Answer = "[\"error\",\"undefined email/passwd\"]";
-                true ->
-                    {ok, Pid} = mail_client:open_retrieve_session(
+            {ok, Pid} = mail_client:open_retrieve_session(
                         "ipv6.dp.ua", 993, Email, Passwd, [ssl, imap]),
-                    {MailBox, MbState, Value} = 
-                        muz_mail_handler:mailbox_list(Pid),
-                    %%Answer = "[\"" ++ MailBox ++"\",[\"" ++ MbState ++ 
-                    %%    "\",\"" ++ Value ++"\"]]"
-                    Answer = jsx:encode([binary:list_to_bin(Email), 
-                                        binary:list_to_bin(MailBox),
-                                        [binary:list_to_bin(MbState),
-                                        binary:list_to_bin(Value)]])
-            end
+            List = muz_mail_handler:mailbox_list(Pid),
+            H = {binary:list_to_bin("email"), binary:list_to_bin(Email)},
+            Answer = jsx:encode([H | List])
     end, 
     {reply, {text, Answer}, Req, State, hibernate};
 websocket_handle(Data, Req, State) ->
