@@ -9,15 +9,23 @@ function MailCtrl($scope, $rootScope) {
     ws.onclose = function() {
         alert("Connection closed");  
     };
+    
+    $scope.inbox = function() {
+        ws.send(JSON.stringify({"ws": "inbox"}));      
+    };
 
     ws.onmessage = function(evt) {
-        var mailBoxes = JSON.parse(evt.data);
-        $scope.message = {inbox: mailBoxRetStr(mailBoxes.INBOX[1]),
-                          email: mailBoxes.email,
-                          sent: mailBoxRetStr(mailBoxes.Sent[1]),
-                          drafts: mailBoxRetStr(mailBoxes.Drafts[1]),
-                          spam: mailBoxRetStr(mailBoxes.SPAM[1]),
-                          trash: mailBoxRetStr(mailBoxes.Trash[1])};
+        var data = JSON.parse(evt.data);
+        if(data.email) {
+        $scope.message = {inbox: mailBoxRetStr(data.INBOX[1]),
+                          email: data.email,
+                          sent: mailBoxRetStr(data.Sent[1]),
+                          drafts: mailBoxRetStr(data.Drafts[1]),
+                          spam: mailBoxRetStr(data.SPAM[1]),
+                          trash: mailBoxRetStr(data.Trash[1])};
+        } else if(data[0] == 'inbox'){
+            alert(data);  
+        }
         $scope.$digest();
     };
 }

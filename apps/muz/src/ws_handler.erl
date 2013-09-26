@@ -24,9 +24,18 @@ websocket_handle({text, Msg}, Req, State) ->
                         "ipv6.dp.ua", 993, Email, Passwd, [ssl, imap]),
             List = muz_mail_handler:mailbox_list(Pid),
             H = {binary:list_to_bin("email"), binary:list_to_bin(Email)},
-            Answer = jsx:encode([H | List])
+            Answer = jsx:encode([H | List]);
+        [{_, <<"inbox">>}] ->
+            [Pid] = State,
+            {ok, {_Mailbox, Mails}} = 
+                mail_client:imap_select_mailbox(Pid, "INBOX", 2),
+            Numbers = muz_mail_handler:get_mail_number(Mails),
+            First = lists:last(Numbers),
+            {ok, [{First, Raw}]} = 
+                mail_client:imap_retrieve_message(Pid, First),
+            Answer = muz_mail_handler:raw_message_to_mail(Raw, Msg)
     end, 
-    {reply, {text, Answer}, Req, State, hibernate};
+    {reply, {text, Answer}, Req, [Pid], hibernate};
 websocket_handle(Data, Req, State) ->
     ?INFO("Handle: ~p", [Data]),
     {ok, Req, State}.
