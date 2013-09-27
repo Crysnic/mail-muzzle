@@ -17,13 +17,15 @@ websocket_init(_TransportName, Req, _Opts) ->
 
 websocket_handle({text, Msg}, Req, State) ->
     case jsx:decode(Msg) of
-        [{_, <<"start">>}] ->
-            Email = muz_lib:get_option(email),
-            Passwd = muz_lib:get_option(password),
+        [{_, <<"start">>}, {_, Email}, {_, Passwd}] ->
             {ok, Pid} = mail_client:open_retrieve_session(
-                        "ipv6.dp.ua", 993, Email, Passwd, [ssl, imap]),
+                        "ipv6.dp.ua",
+                        993,
+                        binary:bin_to_list(Email),
+                        binary:bin_to_list(Passwd),
+                        [ssl, imap]),
             List = muz_mail_handler:mailbox_list(Pid),
-            H = {binary:list_to_bin("email"), binary:list_to_bin(Email)},
+            H = {binary:list_to_bin("email"), Email},
             Answer = jsx:encode([H | List]);
         [{_, <<"inbox">>}] ->
             [Pid] = State,

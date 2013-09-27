@@ -1,13 +1,15 @@
-function MailCtrl($scope, $rootScope) {
+function MailCtrl($scope, $rootScope, $location) {
     var ws = new WebSocket("wss://127.0.0.1:9999/websocket");     
 
     ws.onopen = function() {
-    var SendObj = {"ws": "start"};
+    var SendObj = {"ws": "start",
+                   "email": $rootScope.email,
+                   "passwd": $rootScope.passwd};
 	ws.send(JSON.stringify(SendObj));
     };
         
     ws.onclose = function() {
-        alert("Connection closed");  
+        alert("Connection closed");
     };
     
     $scope.inbox = function() {
@@ -18,7 +20,7 @@ function MailCtrl($scope, $rootScope) {
         var data = JSON.parse(evt.data);
         if(data.email) {
         $scope.message = {inbox: mailBoxRetStr(data.INBOX[1]),
-                          email: data.email,
+                          email: $rootScope.email,
                           sent: mailBoxRetStr(data.Sent[1]),
                           drafts: mailBoxRetStr(data.Drafts[1]),
                           spam: mailBoxRetStr(data.SPAM[1]),

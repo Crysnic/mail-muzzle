@@ -21,9 +21,7 @@ content_types_accepted(Req, State) ->
 handle_to_all(Req, State) ->
     {ok, Body, Req1} = cowboy_req:body(Req),
     Object = jsx:decode(Body),
-    {Answ, RetCode, Email, Passwd} = login(Object),
-    application:set_env(muz, email, Email),
-    application:set_env(muz, password, Passwd),
+    {Answ, RetCode} = login(Object),
     Req2 = cowboy_req:set_resp_body(Answ, Req1),
     Req3 = cowboy_req:set_resp_header(
         <<"content-type">>, <<"application/json">>, Req2),
@@ -41,8 +39,8 @@ login([H|[T]]) ->
     try
         {ok, _Pid} = mail_client:open_retrieve_session("ipv6.dp.ua", 993,
                     Email, Psw, [ssl, imap]),
-        {<<"{\"ok\": \"Successful login\"}">>, 200, Email, Psw}
+        {<<"{\"ok\": \"Successful login\"}">>, 200}
     catch
         _:_ ->
-            {<<"{\"error\": \"invalid login/password\"}">>, 404, Email, Psw}
+            {<<"{\"error\": \"invalid login/password\"}">>, 404}
     end.

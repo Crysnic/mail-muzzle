@@ -31,6 +31,8 @@ function LogCtrl($scope, $rootScope, $resource, $http, $location) {
     );
 
     $scope.send = function() {
+        $rootScope.email = $scope.email;
+        $rootScope.passwd = $scope.passwd;
         var user = User.post({met: 'auth'},
             {email: $scope.email, passwd: $scope.passwd},
             function(answer) {
