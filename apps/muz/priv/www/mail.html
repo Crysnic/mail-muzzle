@@ -3,11 +3,49 @@
     background-color: white;
     border-radius: 4px;
 }
+
+td, th {
+    padding-right: 20px;    
+}
+
+.col-md-3 {
+    font-weight: bold;    
+}
+
+.col-md-3 a:hover {
+    color: #8B0000;
+    text-decoration: none;
+}
+
+.col-md-9 a:hover {
+    text-decoration: none;
+    color: #2F4F4F;
+}
+a:link, a:visited {
+    color: black;
+}
 </style>
-<h1>{{message.email}}</h1>
-<p><a ng-click='inbox()'>Inbox{{message.inbox}}</a></p>
-<p>Drafts{{message.drafts}}</p>
-<p>Sent{{message.sent}}</p>
-<p>Trash{{message.trash}}</p>
-<p>SPAM{{message.spam}}</p>
-<p><a href="/">Back<a></p>
+
+<div class="row">
+  <div class="col-md-12"><h1>{{message.email}}</h1></div>
+</div>
+<div class="row">
+  <div class="col-md-3">
+    <p><a href="" ng-click='inbox()'>Inbox{{message.inbox}}</a></p>
+    <p>Drafts{{message.drafts}}</p>
+    <p>Sent{{message.sent}}</p>
+    <p>Trash{{message.trash}}</p>
+    <p>SPAM{{message.spam}}</p>
+    <p><a href="/">Back</a></p>
+  </div>
+  <div class="col-md-9">
+  <table>
+    <tr><th ng-repeat='header in headers'>{{header}}</th></tr>
+    <tr>
+      <td><a href="" ng-click='seeLetter()'>{{letter.subj}}</a></td>
+      <td><a href="" ng-click='seeLetter()'>{{letter.from}}</a></td>
+      <td><a href="" ng-click='seeLetter()'>{{letter.date}}</a></td>
+    </tr>
+  </table>
+  </div>
+</div>

@@ -24,10 +24,24 @@ function MailCtrl($scope, $rootScope) {
                           spam: mailBoxRetStr(data.SPAM[1]),
                           trash: mailBoxRetStr(data.Trash[1])};
         } else if(data[0] == 'inbox'){
-            alert(data);  
+            $scope.headers = ["Subject", "From", "Date"];
+            $scope.letter = {subj: stringShotern(data[4], 60),
+                             from: data[1].match(/^[a-zA-Z ]*/)[0],
+                             date: data[3]};
+            $scope.seeLetter = function() {
+                alert(data[5]);    
+            }
         }
         $scope.$digest();
     };
+}
+
+function stringShotern(str, numb) {
+    if(str.length > numb) {
+        return str.slice(0,(numb - 3)) + "...";    
+    } else {
+        return str;    
+    }
 }
 
 function mailBoxRetStr(string) {
