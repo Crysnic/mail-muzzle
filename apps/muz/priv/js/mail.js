@@ -10,22 +10,28 @@ function MailCtrl($scope, $rootScope, $location) {
         
     ws.onclose = function() {
         alert("Connection closed");
+        ws = new WebSocket("wss://127.0.0.1:9999/websocket");
     };
     
-    $scope.inbox = function() {
-        ws.send(JSON.stringify({"ws": "inbox"}));      
+    $scope.mailbox_send = function(mailbox) {
+        if(mailbox == "INBOX") {
+            ws.send(JSON.stringify({"ws": mailbox}));
+        }
     };
 
     ws.onmessage = function(evt) {
         var data = JSON.parse(evt.data);
-        if(data.email) {
-        $scope.message = {inbox: mailBoxRetStr(data.INBOX[1]),
-                          email: $rootScope.email,
-                          sent: mailBoxRetStr(data.Sent[1]),
-                          drafts: mailBoxRetStr(data.Drafts[1]),
-                          spam: mailBoxRetStr(data.SPAM[1]),
-                          trash: mailBoxRetStr(data.Trash[1])};
-        } else if(data[0] == 'inbox'){
+        if(data[0] == "mailbox") {
+            var array = [];
+            for(var i=1; i < data.length; i += 2) {
+                if(parseInt(data[i+1].MESSAGES) > 0) {
+                    array.push({mailbox: data[i], 
+                    unseen: mailBoxRetStr(data[i+1].UNSEEN)});
+                }
+            }
+            $scope.email = $rootScope.email;
+            $scope.mailboxes = array;
+        } else if(data[0] == 'INBOX'){
             $scope.headers = ["Subject", "From", "Date"];
             $scope.letter = {subj: stringShotern(data[4], 60),
                              from: data[1].match(/^[a-zA-Z ]*/)[0],

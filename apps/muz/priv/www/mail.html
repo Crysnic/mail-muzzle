@@ -27,15 +27,15 @@ a:link, a:visited {
 </style>
 
 <div class="row">
-  <div class="col-md-12"><h1>{{message.email}}</h1></div>
+  <div class="col-md-12"><h1>{{email}}</h1></div>
 </div>
 <div class="row">
   <div class="col-md-3">
-    <p><a href="" ng-click='inbox()'>Inbox{{message.inbox}}</a></p>
-    <p>Drafts{{message.drafts}}</p>
-    <p>Sent{{message.sent}}</p>
-    <p>Trash{{message.trash}}</p>
-    <p>SPAM{{message.spam}}</p>
+    <p ng-repeat='mail in mailboxes'>
+      <a href="" ng-click='mailbox_send(mail.mailbox)'>
+        {{mail.mailbox}}{{mail.unseen}}
+      </a>
+    </p>
     <p><a href="/">Back</a></p>
   </div>
   <div class="col-md-9">

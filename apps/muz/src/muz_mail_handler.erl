@@ -5,12 +5,21 @@
 -spec mailbox_list(Pid :: pid()) -> [MailBox :: tuple()]. 
 mailbox_list(Pid) ->
     {ok, List} = mail_client:imap_list_mailbox(Pid),
-    Inbox = get_mailbox_state(List, "INBOX", "UNSEEN"),
-    Drafts = get_mailbox_state(List, "Drafts", "UNSEEN"),
-    Sent = get_mailbox_state(List, "Sent", "UNSEEN"),
-    Trash = get_mailbox_state(List, "Trash", "UNSEEN"),
-    Spam = get_mailbox_state(List, "SPAM", "UNSEEN"),
-    [Inbox, Drafts, Sent, Trash, Spam].
+    io:format("~p", [List]),
+    [list_to_binary("mailbox")] ++  full_mailbox_list(List).
+
+full_mailbox_list([]) ->
+    [];
+full_mailbox_list([H|T]) ->
+    {MailBox, _, List} = H,
+    [list_to_binary(MailBox), keyfind(["UNSEEN", "MESSAGES"], List)] ++
+        full_mailbox_list(T).
+
+keyfind([], _List) ->
+    [];
+keyfind([H|T], List) ->
+    {H, Val} = lists:keyfind(H, 1, List),
+    [{list_to_binary(H), list_to_binary(Val)}] ++ keyfind(T, List).
 
 get_mail_number([]) ->
     [];
@@ -23,18 +32,3 @@ raw_message_to_mail(Raw, Msg) ->
         retrieve_util:raw_message_to_mail(Raw),
     [{_, MailBox}] = jsx:decode(Msg),
     jsx:encode([MailBox, From, To, Date, Thema, Body]). 
-
-%% Internal functions
-
-get_mailbox_state([], MailBox, _State) ->
-    {binary:list_to_bin(MailBox), [error, not_fined]};
-get_mailbox_state([H|T], MailBox, State) ->
-    case H of
-        {MailBox, _, List} ->
-            {State, Val} = lists:keyfind(State, 1, List),
-            {binary:list_to_bin(MailBox), 
-             [binary:list_to_bin(State), 
-             binary:list_to_bin(Val)]};
-        _ ->
-            get_mailbox_state(T, MailBox, State)
-    end.

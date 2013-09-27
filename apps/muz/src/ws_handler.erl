@@ -25,9 +25,8 @@ websocket_handle({text, Msg}, Req, State) ->
                         binary:bin_to_list(Passwd),
                         [ssl, imap]),
             List = muz_mail_handler:mailbox_list(Pid),
-            H = {binary:list_to_bin("email"), Email},
-            Answer = jsx:encode([H | List]);
-        [{_, <<"inbox">>}] ->
+            Answer = jsx:encode(List);
+        [{_, <<"INBOX">>}] ->
             [Pid] = State,
             {ok, {_Mailbox, Mails}} = 
                 mail_client:imap_select_mailbox(Pid, "INBOX", 2),

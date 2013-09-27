@@ -20,7 +20,7 @@ run:
 	@$(LIBS) $(REBAR) compile skip_deps=true
 	@$(LIBS) $(ERL) -config rel/files/sys.config \
 		-args_files rel/files/vm.args \
-		-s muz
+		-s muz +pc unicode
 
 build-plt:
 	@$(LIBS) $(DIALYZER) --build_plt --output_plt $(PROJECT).plt \
