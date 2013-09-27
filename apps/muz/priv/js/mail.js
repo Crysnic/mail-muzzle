@@ -2,10 +2,23 @@ function MailCtrl($scope, $rootScope, $location) {
     var ws = new WebSocket("wss://127.0.0.1:9999/websocket");     
 
     ws.onopen = function() {
-    var SendObj = {"ws": "start",
-                   "email": $rootScope.email,
-                   "passwd": $rootScope.passwd};
-	ws.send(JSON.stringify(SendObj));
+        var email;
+        var passwd;
+
+        if($rootScope.email) {
+            email = $rootScope.email;
+            passwd = $rootScope.passwd;
+        } else if(localStorage.getItem('email')) {
+            email = localStorage.getItem('email');
+            passwd = localStorage.getItem('passwd');
+        };
+
+        $scope.email = email;
+
+        var SendObj = {"ws": "start",
+                   "email": email,
+                   "passwd": passwd};
+	    ws.send(JSON.stringify(SendObj));
     };
         
     ws.onclose = function() {
@@ -19,6 +32,12 @@ function MailCtrl($scope, $rootScope, $location) {
         }
     };
 
+    $scope.exit = function() {
+        localStorage.removeItem('email');
+        localStorage.removeItem('passwd');
+        $location.path("/");
+    };
+
     ws.onmessage = function(evt) {
         var data = JSON.parse(evt.data);
         if(data[0] == "mailbox") {
@@ -29,7 +48,6 @@ function MailCtrl($scope, $rootScope, $location) {
                     unseen: mailBoxRetStr(data[i+1].UNSEEN)});
                 }
             }
-            $scope.email = $rootScope.email;
             $scope.mailboxes = array;
         } else if(data[0] == 'INBOX'){
             $scope.headers = ["Subject", "From", "Date"];

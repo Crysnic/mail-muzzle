@@ -19,28 +19,4 @@ function emailRouteConfig($routeProvider) {
 // Main controller
 MailServices.config(emailRouteConfig);
 
-// Login controller
-function LogCtrl($scope, $rootScope, $resource, $http, $location) {
-    $http.defaults.headers.post['Content-Type'] = 'application/json';
-    var User = $resource('/:met',
-        {met:'@method'}, 
-        {post:
-            {method:'POST', 
-             headers: {'ignored':'ignored'}}
-    	}
-    );
 
-    $scope.send = function() {
-        $rootScope.email = $scope.email;
-        $rootScope.passwd = $scope.passwd;
-        var user = User.post({met: 'auth'},
-            {email: $scope.email, passwd: $scope.passwd},
-            function(answer) {
-                $scope.answ = 'INFO: ' + answer.ok;
-                $location.path('/mail');
-            },
-            function(answer){
-                $scope.answ = 'Error: ' + answer.data.error;    
-            });
-    }
-}

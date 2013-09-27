@@ -1,13 +1,18 @@
 <form class="form-signin" ng-controller="LogCtrl" id="inf">
   <h2 class="form-signin-heading">Please sign in</h2>
-  <input type="text" id="email" class="form-control" ng-model="email" 
-        placeholder="Email adress" autofocus>
+
+  <input type="email" id="email" class="form-control" ng-model="email" 
+          placeholder="Email adress" autofocus required>
+
   <input type="password" ng-model="passwd" class="form-control"
-        placeholder="Password">
+         placeholder="Password" required>
+
   <label class="checkbox">
-    <input type="checkbox" name="remember" value="1"> Remember Me
+    <input type="checkbox" ng-model="remembe"> Remember Me
   </label>
-  <input type="submit" ng-click="send()" 
+
+  <input type="submit" ng-click="send()"
          class="btn btn-success" value="Sign in">
+
   <div >{{answ}}</div>
 </form>
