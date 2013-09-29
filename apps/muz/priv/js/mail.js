@@ -23,7 +23,6 @@ function MailCtrl($scope, $rootScope, $location) {
         
     ws.onclose = function() {
         alert("Connection closed");
-        ws = new WebSocket("wss://127.0.0.1:9999/websocket");
     };
     
     $scope.mailbox_send = function(mailbox) {
@@ -52,10 +51,15 @@ function MailCtrl($scope, $rootScope, $location) {
         } else if(data[0] == 'INBOX'){
             $scope.headers = ["Subject", "From", "Date"];
             $scope.letter = {subj: stringShotern(data[4], 60),
+                             subjFull: data[4],
+                             fromFull: data[1],
                              from: data[1].match(/^[a-zA-Z ]*/)[0],
-                             date: data[3]};
+                             to: data[2][0],
+                             date: data[3],
+                             data: data[5],
+                             see: false};
             $scope.seeLetter = function() {
-                alert(data[5]);    
+                $scope.letter.see = !$scope.letter.see;
             }
         }
         $scope.$digest();
