@@ -23,3 +23,9 @@ td, th {
 a:link, a:visited {
     color: black;
 }
+.col-md-9 div {
+    padding-top: 10px;                                                  
+}
+.col-md-9 table {
+    margin-bottom: 20px;  
+}

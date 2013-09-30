@@ -29,12 +29,10 @@ websocket_handle({text, Msg}, Req, State) ->
         [{_, <<"INBOX">>}] ->
             [Pid] = State,
             {ok, {_Mailbox, Mails}} = 
-                mail_client:imap_select_mailbox(Pid, "INBOX", 2),
+                mail_client:imap_select_mailbox(Pid, "INBOX", 15),
             Numbers = muz_mail_handler:get_mail_number(Mails),
-            First = lists:last(Numbers),
-            {ok, [{First, Raw}]} = 
-                mail_client:imap_retrieve_message(Pid, First),
-            Answer = muz_mail_handler:raw_message_to_mail(Raw, Msg)
+            Letters = muz_mail_handler:get_letter(Pid, Numbers),
+            Answer = jsx:encode([list_to_binary("INBOX")] ++ Letters)
     end, 
     {reply, {text, Answer}, Req, [Pid], hibernate};
 websocket_handle(Data, Req, State) ->

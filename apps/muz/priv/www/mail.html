@@ -15,21 +15,21 @@
   <div class="col-md-9">
   <table>
     <tr><th ng-repeat='header in headers'>{{header}}</th></tr>
-    <tr>
-      <td><a href="" ng-click='seeLetter()'>{{letter.subj}}</a></td>
-      <td><a href="" ng-click='seeLetter()'>{{letter.from}}</a></td>
-      <td><a href="" ng-click='seeLetter()'>{{letter.date}}</a></td>
+    <tr ng-repeat="let in letters">
+      <td><a href="" ng-click='seeLetter(let.numb)'>{{let.subj}}</a></td>
+      <td><a href="" ng-click='seeLetter(let.numb)'>{{let.from}}</a></td>
+      <td><a href="" ng-click='seeLetter(let.numb)'>{{let.date}}</a></td>
     </tr>
   </table>
 
-  <div ng-show='letter.see'>
+  <div ng-show='see'>
     <table>
-    <tr><th>From:</th><td>{{letter.fromFull}}</td></tr>
-    <tr><th>Subject:</th> <td>{{letter.subjFull}}</td></tr>
-    <tr><th>To:</th><td>{{letter.to}}</td></tr>
+    <tr><th>From:</th><td>{{from}}</td></tr>
+    <tr><th>Subject:</th> <td>{{subj}}</td></tr>
+    <tr><th>To:</th><td>{{to}}</td></tr>
     </table>
-    <pre ng-show='letter.see'>
-      {{letter.data}}
+    <pre ng-show='see'>
+      {{data}}
     </pre>
   </div>
 

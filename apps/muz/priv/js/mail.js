@@ -49,17 +49,27 @@ function MailCtrl($scope, $rootScope, $location) {
             }
             $scope.mailboxes = array;
         } else if(data[0] == 'INBOX'){
+            $scope.see = false;
             $scope.headers = ["Subject", "From", "Date"];
-            $scope.letter = {subj: stringShotern(data[4], 60),
-                             subjFull: data[4],
-                             fromFull: data[1],
-                             from: data[1].match(/^[a-zA-Z ]*/)[0],
-                             to: data[2][0],
-                             date: data[3],
-                             data: data[5],
-                             see: false};
-            $scope.seeLetter = function() {
-                $scope.letter.see = !$scope.letter.see;
+            var letters = [];
+            for(var i=1; i<data.length; i+=2) { 
+                letters[i-1] = {
+                    numb: i-1,
+                    subj: stringShotern(data[i+1][3], 60),
+                    subjFull: data[i+1][3],
+                    fromFull: data[i+1][0],
+                    from: data[i+1][0].match(/^[".a-zA-Z ]*/)[0],
+                    to: data[i+1][1][0],
+                    date: data[i+1][2],
+                    data: data[i+1][4]};
+            }
+            $scope.letters = letters;
+            $scope.seeLetter = function(index) {
+                $scope.see = !$scope.see;
+                $scope.to = letters[index].to;
+                $scope.subj = letters[index].subjFull;
+                $scope.from = letters[index].fromFull;
+                $scope.data = letters[index].data;
             }
         }
         $scope.$digest();

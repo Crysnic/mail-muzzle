@@ -1,11 +1,20 @@
 -module(muz_mail_handler).
 
--export([mailbox_list/1, get_mail_number/1, raw_message_to_mail/2]).
+-export([mailbox_list/1, get_mail_number/1, raw_message_to_mail/2,
+         get_letter/2]).
+
+-include("muz.hrl").
+
+get_letter(_Pid, []) ->
+    [];
+get_letter(Pid, [H|T]) ->
+    {ok, [{H, Raw}]} = mail_client:imap_retrieve_message(Pid, H),
+    [list_to_binary(integer_to_list(H)), raw_to_mail(Raw)] ++
+        get_letter(Pid, T).
 
 -spec mailbox_list(Pid :: pid()) -> [MailBox :: tuple()]. 
 mailbox_list(Pid) ->
     {ok, List} = mail_client:imap_list_mailbox(Pid),
-    io:format("~p", [List]),
     [list_to_binary("mailbox")] ++  full_mailbox_list(List).
 
 full_mailbox_list([]) ->
@@ -31,4 +40,9 @@ raw_message_to_mail(Raw, Msg) ->
     {mail, From, To, _, _, Date, _, Thema, Body, _} = 
         retrieve_util:raw_message_to_mail(Raw),
     [{_, MailBox}] = jsx:decode(Msg),
-    jsx:encode([MailBox, From, To, Date, Thema, Body]). 
+    jsx:encode([MailBox, From, To, Date, Thema, Body]).
+
+raw_to_mail(Raw) -> 
+    {mail, From, To, _, _, Date, _, Thema, Body, _} =
+        retrieve_util:raw_message_to_mail(Raw),
+    [From, To, Date, Thema, Body].
