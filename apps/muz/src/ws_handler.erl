@@ -26,13 +26,13 @@ websocket_handle({text, Msg}, Req, State) ->
                         [ssl, imap]),
             List = muz_mail_handler:mailbox_list(Pid),
             Answer = jsx:encode(List);
-        [{_, <<"INBOX">>}] ->
+        [{_, Dir}] ->
             [Pid] = State,
-            {ok, {_Mailbox, Mails}} = 
-                mail_client:imap_select_mailbox(Pid, "INBOX", 15),
+            {ok, {_Mailbox, Mails}} = mail_client:imap_select_mailbox(Pid,
+                binary:bin_to_list(Dir), 15),
             Numbers = muz_mail_handler:get_mail_number(Mails),
             Letters = muz_mail_handler:get_letter(Pid, Numbers),
-            Answer = jsx:encode([list_to_binary("INBOX")] ++ Letters)
+            Answer = jsx:encode([Dir] ++ Letters)
     end, 
     {reply, {text, Answer}, Req, [Pid], hibernate};
 websocket_handle(Data, Req, State) ->

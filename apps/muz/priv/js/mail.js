@@ -26,9 +26,7 @@ function MailCtrl($scope, $rootScope, $location) {
     };
     
     $scope.mailbox_send = function(mailbox) {
-        if(mailbox == "INBOX") {
-            ws.send(JSON.stringify({"ws": mailbox}));
-        }
+        ws.send(JSON.stringify({"ws": mailbox}));
     };
 
     $scope.exit = function() {
@@ -48,7 +46,7 @@ function MailCtrl($scope, $rootScope, $location) {
                 }
             }
             $scope.mailboxes = array;
-        } else if(data[0] == 'INBOX'){
+        } else {
             $scope.see = false;
             $scope.headers = ["Subject", "From", "Date"];
             var letters = [];
