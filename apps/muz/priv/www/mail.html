@@ -4,7 +4,7 @@
   <div class="col-md-12"><h1>{{email}}</h1></div>
 </div>
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-md-2">
     <p ng-repeat='mail in mailboxes'>
       <a href="" ng-click='mailbox_send(mail.mailbox)'>
         {{mail.mailbox}}{{mail.unseen}}
@@ -12,24 +12,28 @@
     </p>
     <p><a href="" ng-click="exit()">EXIT</a></p>
   </div>
-  <div class="col-md-9">
+  <div class="col-md-10">
   <table>
     <tr><th ng-repeat='header in headers'>{{header}}</th></tr>
     <tr ng-repeat="let in letters">
-      <td><a href="" ng-click='seeLetter(let.numb)'>{{let.subj}}</a></td>
-      <td><a href="" ng-click='seeLetter(let.numb)'>{{let.from}}</a></td>
-      <td><a href="" ng-click='seeLetter(let.numb)'>{{let.date}}</a></td>
+      <td><a href="" ng-click='seeLetter(let.numb, let.mailbox)'>
+        {{let.subj}}</a></td>
+      <td>{{let.flags}}</td>
+      <td><a href="" ng-click='seeLetter(let.numb, let.mailbox)'>
+        {{let.from}}</a></td>
+      <td><a href="" ng-click='seeLetter(let.numb, let.mailbox)'>
+        {{let.date}}</a></td>
     </tr>
   </table>
 
   <div ng-show='see'>
     <table>
-    <tr><th>From:</th><td>{{from}}</td></tr>
-    <tr><th>Subject:</th> <td>{{subj}}</td></tr>
-    <tr><th>To:</th><td>{{to}}</td></tr>
+    <tr><th>From:</th><td>{{letter.from}}</td></tr>
+    <tr><th>Subject:</th> <td>{{letter.subj}}</td></tr>
+    <tr><th>To:</th><td>{{letter.to}}</td></tr>
     </table>
     <pre ng-show='see'>
-      {{data}}
+      {{letter.data}}
     </pre>
   </div>
 

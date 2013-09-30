@@ -4,12 +4,10 @@
 
 -include("muz.hrl").
 
-get_letter(_Pid, []) ->
-    [];
-get_letter(Pid, [H|T]) ->
-    {ok, [{H, Raw}]} = mail_client:imap_retrieve_message(Pid, H),
-    [list_to_binary(integer_to_list(H)), raw_to_mail(Raw)] ++
-        get_letter(Pid, T).
+get_letter(Pid, BinValue) ->
+    Value = binary_to_integer(BinValue),
+    {ok, [{_, Raw}]} = mail_client:imap_retrieve_message(Pid, Value),
+    raw_to_mail(Raw).
 
 -spec mailbox_list(Pid :: pid()) -> [MailBox :: tuple()]. 
 mailbox_list(Pid) ->
@@ -29,11 +27,25 @@ keyfind([H|T], List) ->
     {H, Val} = lists:keyfind(H, 1, List),
     [{list_to_binary(H), list_to_binary(Val)}] ++ keyfind(T, List).
 
+%% Get list of letters headers
 get_mail_number([]) ->
     [];
 get_mail_number([H|T]) ->
-    {Numb, _} = H, 
-    [Numb] ++ get_mail_number(T).
+    {Numb, [
+        {"SIZE", _},
+        {"FLAGS", Flags},
+        {"ENVELOPE",
+         {envelope, Date, Subj,
+            [{address, From, _, _Nick, _Host}],
+            _,
+            _,
+            _,
+            _, _, _, _}}, _]} = H, 
+    [[list_to_binary(integer_to_list(Numb)), 
+      [list_to_binary(atom_to_list(X)) || X <- Flags], 
+      list_to_binary(Date),
+      list_to_binary(Subj),
+      list_to_binary(From)]] ++ get_mail_number(T).
 
 raw_to_mail(Raw) -> 
     {mail, From, To, _, _, Date, _, Thema, Body, _} =

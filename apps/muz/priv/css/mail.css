@@ -7,25 +7,25 @@ td, th {
     padding-right: 20px;    
 }
 
-.col-md-3 {
+.col-md-2 {
     font-weight: bold;    
 }
 
-.col-md-3 a:hover {
+.col-md-2 a:hover {
     color: #8B0000;
     text-decoration: none;
 }
 
-.col-md-9 a:hover {
+.col-md-10 a:hover {
     text-decoration: none;
     color: #2F4F4F;
 }
 a:link, a:visited {
     color: black;
 }
-.col-md-9 div {
+.col-md-10 div {
     padding-top: 10px;                                                  
 }
-.col-md-9 table {
+.col-md-10 table {
     margin-bottom: 20px;  
 }

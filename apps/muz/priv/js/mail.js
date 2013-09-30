@@ -35,39 +35,44 @@ function MailCtrl($scope, $rootScope, $location) {
         $location.path("/");
     };
 
-    ws.onmessage = function(evt) {
-        var data = JSON.parse(evt.data);
-        if(data[0] == "mailbox") {
-            var array = [];
-            for(var i=1; i < data.length; i += 2) {
-                if(parseInt(data[i+1].MESSAGES) > 0) {
-                    array.push({mailbox: data[i], 
-                    unseen: mailBoxRetStr(data[i+1].UNSEEN)});
-                }
+ws.onmessage = function(evt) {
+    var data = JSON.parse(evt.data);
+    if(data[0] == "mailbox") {
+        var array = [];
+        for(var i=1; i < data.length; i += 2) {
+            if(parseInt(data[i+1].MESSAGES) > 0) {
+                array.push({mailbox: data[i], 
+                unseen: mailBoxRetStr(data[i+1].UNSEEN)});
             }
-            $scope.mailboxes = array;
-        } else {
+        }
+        $scope.mailboxes = array;
+        } else if(data[0] == "letter") {
+            $scope.see = true;
+            $scope.letter = {
+                to: data[2][0],
+                from: data[1],
+                subj: data[4],
+                date: data[3],
+                data: data[5]
+            };
+        }else {
             $scope.see = false;
-            $scope.headers = ["Subject", "From", "Date"];
+            $scope.headers = ["Subject", "Flags", "From", "Date"];
             var letters = [];
-            for(var i=1; i<data.length; i+=2) { 
+            for(var i=1; i<data.length; i++) { 
                 letters[i-1] = {
-                    numb: i-1,
-                    subj: stringShotern(data[i+1][3], 60),
-                    subjFull: data[i+1][3],
-                    fromFull: data[i+1][0],
-                    from: data[i+1][0].match(/^[".a-zA-Z ]*/)[0],
-                    to: data[i+1][1][0],
-                    date: data[i+1][2],
-                    data: data[i+1][4]};
+                    mailbox: data[0],
+                    numb: data[i][0],
+                    subj: stringShotern(data[i][3], 60),
+                    from: data[i][4],
+                    date: data[i][2],
+                    flags: data[i][1]
+                };
             }
             $scope.letters = letters;
-            $scope.seeLetter = function(index) {
-                $scope.see = !$scope.see;
-                $scope.to = letters[index].to;
-                $scope.subj = letters[index].subjFull;
-                $scope.from = letters[index].fromFull;
-                $scope.data = letters[index].data;
+            $scope.seeLetter = function(index, mailbox) {
+                ws.send(JSON.stringify({"ws": {"index": index,
+                                               "mailbox": mailbox}}));
             }
         }
         $scope.$digest();
